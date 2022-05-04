@@ -20,8 +20,7 @@ export interface getBookMark{
 export class PostLogsService {
   private url = "https://api.jsonbin.io/b/6250885bd20ace068f959856/17";
   headers = { headers: new Headers({ 'Content-Type': 'application/json' })};
-  token = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJoZWxsbzEiLCJqdGkiOiI0NGQ2NGQzMy1iM2ZmLTRiMDYtODgyMS1kYjUyNzVmZjJkZjYiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiaGVsbG8xIiwibmJmIjoxNjUxNTQxNDI3LCJleHAiOjE2NTE4MDA2MjcsImF1ZCI6IlJlbW90ZUxvZ2dlclVzZXJzIn0.nfGJdEn7dMD39cze_58gB5-4k2JA229aVDEo98R12R7nQF-bbFZHO7fVpYojX6ZBnws_R_yJDYN8MByLsfTsVg';
-  token2 = 'eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJoZWxsbzEiLCJqdGkiOiI0NGQ2NGQzMy1iM2ZmLTRiMDYtODgyMS1kYjUyNzVmZjJkZjYiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjIiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiaGVsbG8xIiwibmJmIjoxNjUxNTQxNDI3LCJleHAiOjE2NTE4MDA2MjcsImF1ZCI6IlJlbW90ZUxvZ2dlclVzZXJzIn0.nfGJdEn7dMD39cze_58gB5-4k2JA229aVDEo98R12R7nQF-bbFZHO7fVpYojX6ZBnws_R_yJDYN8MByLsfTsVg';
+  private token: string = "";
   
   constructor(private http: HttpClient) { }
 
@@ -35,15 +34,16 @@ export class PostLogsService {
 
   }
 
-  setJwtToken(){
-    
+  setJwtToken(jwt: any){
+    var jsonToken: any;
+    this.token = jsonToken = JSON.parse(atob(this.token.split('.')[1]));
+
   }
 
   /** Get Token  */
 
   getJwtToken(){
-    var jsonToken = JSON.parse(atob(this.token.split('.')[1]));
-    return this.token2;
+    return this.token;
   }
   
   /** Delete Selected Logs */

@@ -168,8 +168,11 @@ export class LogTableComponent implements OnInit, AfterViewInit {
   /** SaveUserBookMark */
 
   saveUserBookmark(){
-    var bookmark: postBookMark = {Id : 0, UserID : 5, LogID: 5};
+    var log: Log[] = this.dataSource.data;
+    var bookmark: postBookMark = {Id : 0, UserID : 0, LogID: 5};//Need to retrieve LogID
     var bookmarks: getBookMark[] = this.bookmarkDataSource.data; 
+    var userIDtoken = this.service.getJwtToken(); //Gets  UserID from JWT token.
+    var userID  = this.setUserId();
     for (let i = 0; i < bookmarks.length; i++){
       if (bookmark.LogID != bookmarks[i].logID && bookmark.UserID == bookmarks[i].userID){
         this.service.addUserBookmarks(bookmark);
@@ -192,6 +195,15 @@ export class LogTableComponent implements OnInit, AfterViewInit {
     }
     
     
+  }
+
+  setUserId(){
+    var token = this.service.getJwtToken();
+    var userID: number;
+    var tokenParse = JSON.parse(atob(token.split('.')[1]));
+    userID = (tokenParse['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']);
+    console.log(userID);
+    return(userID);
   }
 
   /** DeleteLogs */
