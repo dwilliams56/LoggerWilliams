@@ -56,7 +56,7 @@ export class LogTableComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.fetchLogs();
-    this.fetchBookmarks;
+    this.fetchBookmarks();
   }
 
   fetchLogs(): void {
@@ -79,6 +79,15 @@ export class LogTableComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
+  refresh(){
+    this.dataSource._updateChangeSubscription();
+    this.ngAfterViewInit();
+  }
+
+  refreshBookmarks(){
+    this.bookmarkDataSource._updateChangeSubscription();
+    this.bookmarkDataSource.data = this.bookmarkDataSource.data;
+  }
 
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
@@ -159,20 +168,27 @@ export class LogTableComponent implements OnInit, AfterViewInit {
   /** SaveUserBookMark */
 
   saveUserBookmark(){
-    var bookmark: postBookMark = {Id : 0, UserID : 0, LogID: 0};
+    var bookmark: postBookMark = {Id : 0, UserID : 5, LogID: 5};
     var bookmarks: getBookMark[] = this.bookmarkDataSource.data; 
-    console.log(bookmarks);
-
     for (let i = 0; i < bookmarks.length; i++){
       if (bookmark.LogID != bookmarks[i].logID && bookmark.UserID == bookmarks[i].userID){
-        console.log("working");
         this.service.addUserBookmarks(bookmark);
+        i = (bookmarks.length) - 1
       }
       else if(bookmark.LogID == bookmarks[i].logID && bookmark.UserID != bookmarks[i].userID){
         this.service.addUserBookmarks(bookmark);
+        i = (bookmarks.length) - 1
       }
-      else 
+      else if(bookmark.LogID != bookmarks[i].logID && bookmark.UserID != bookmarks[i].userID){
+        this.service.addUserBookmarks(bookmark);
+        i = (bookmarks.length) - 1
+      }
+      else {
         console.log("Already in system");
+      }
+
+      this.refreshBookmarks();
+
     }
     
     
@@ -209,5 +225,8 @@ export class LogTableComponent implements OnInit, AfterViewInit {
       }
       
     }
+
+    this.service.deleteLogs(sortedId);
+    this.refresh();
   }
 }

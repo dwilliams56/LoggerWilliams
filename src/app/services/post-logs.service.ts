@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-export interface BookMark{
+export interface postBookMark{
   Id: number,
   UserID: number,
   LogID: number
+}
+
+export interface getBookMark{
+  bookmarkID: number,
+  userID: number,
+  logID: number
 }
 
 @Injectable({
@@ -59,9 +65,9 @@ export class PostLogsService {
 
   /** Add User Bookmarks */
 
-  addUserBookmarks(bookMark: BookMark){
+  addUserBookmarks(bookMark: postBookMark){
     const headers = { 'content-type': 'application/json'} 
-    console.log(bookMark);
+    console.log(bookMark + "addUser");
     var book = JSON.stringify(bookMark) 
     return this.http.post("https://localhost:5001/api/Bookmark/AddBookmark", book, {'headers': headers}).subscribe((response) =>
     { console.log(response);
