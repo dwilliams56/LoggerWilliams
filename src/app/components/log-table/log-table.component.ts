@@ -7,21 +7,27 @@ import { MatSort } from '@angular/material/sort';
 import { MatDatepicker } from '@angular/material/datepicker';
 import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
 
-export interface BookMark{
+export interface postBookMark{
   Id: number,
   UserID: number,
   LogID: number
 }
 
+export interface getBookMark{
+  bookmarkID: number,
+  userID: number,
+  logID: number
+}
+
 export interface Log{
-  LogID: number,
-  Application: string,
-  ApplicationVersion: string,
-  UserID: number,
-  CompanyID: number,
-  LogDateTime: string,
-  LogContent: string,
-  NoteContent: string
+  logID: number,
+  application: string,
+  applicationVersion: string,
+  userID: number,
+  companyID: number,
+  logDateTime: string,
+  logContent: string,
+  noteContent: string
 }
 
 @Component({
@@ -35,6 +41,7 @@ export class LogTableComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['Select','LogID','Application', 'ApplicationVersion', 'UserID', 'CompanyID','LogDateTime','LogContent','Actions'];
   dataSource = new MatTableDataSource<Log>([]);
   copyDataSource = new MatTableDataSource<Log>([]);
+  bookmarkDataSource = new MatTableDataSource<getBookMark>([]);
   clickedRows = new Set<Log>();
   bookmarked: number[] = [];
   selection = new SelectionModel<Log>(true, []);
@@ -49,6 +56,7 @@ export class LogTableComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.fetchLogs();
+    this.fetchBookmarks;
   }
 
   fetchLogs(): void {
@@ -57,6 +65,12 @@ export class LogTableComponent implements OnInit, AfterViewInit {
     });
     this.service.getLogs().subscribe((data) => {
       this.copyDataSource.data = data as Log[];
+    });
+  }
+
+  fetchBookmarks(): void {
+    this.service.getUserBookmarks().subscribe((data) => {
+      this.bookmarkDataSource.data = data as getBookMark[];
     });
   }
 
@@ -101,7 +115,7 @@ export class LogTableComponent implements OnInit, AfterViewInit {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.LogID + 1}`;
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.logID + 1}`;
   }
 
   /** RangePicker, Methods for Date Range */
@@ -123,7 +137,7 @@ export class LogTableComponent implements OnInit, AfterViewInit {
   applyDateRangeFilter(start: Date, end: Date){
     var startDate = (start.toISOString);
     var endDate = (end.toISOString);
-    this.dataSource.data = this.copyDataSource.data.filter(e=>(new Date(e.LogDateTime))  >= start && (new Date(e.LogDateTime) <= end));
+    this.dataSource.data = this.copyDataSource.data.filter(e=>(new Date(e.logDateTime))  >= start && (new Date(e.logDateTime) <= end));
     console.log(start, end);
     
 
@@ -145,10 +159,22 @@ export class LogTableComponent implements OnInit, AfterViewInit {
   /** SaveUserBookMark */
 
   saveUserBookmark(){
-    var bookmark: BookMark = {Id : 0, UserID : 0, LogID: 0};
-    bookmark.UserID = 0;
-    bookmark.LogID = 0;
-    this.service.addUserBookmarks(bookmark); //addUserBookmarks to database(In PostLogsService)
+    var bookmark: postBookMark = {Id : 0, UserID : 0, LogID: 0};
+    var bookmarks: getBookMark[] = this.bookmarkDataSource.data; 
+    console.log(bookmarks);
+
+    for (let i = 0; i < bookmarks.length; i++){
+      if (bookmark.LogID != bookmarks[i].logID && bookmark.UserID == bookmarks[i].userID){
+        console.log("working");
+        this.service.addUserBookmarks(bookmark);
+      }
+      else if(bookmark.LogID == bookmarks[i].logID && bookmark.UserID != bookmarks[i].userID){
+        this.service.addUserBookmarks(bookmark);
+      }
+      else 
+        console.log("Already in system");
+    }
+    
     
   }
 
@@ -166,16 +192,16 @@ export class LogTableComponent implements OnInit, AfterViewInit {
     console.log(selectedLogs);
     size = selectedLogs.length
     for(let i = 0; i < size ; i++){
-      id[i] = (selectedLogs[i].LogID)
+      id[i] = (selectedLogs[i].logID)
     }
 
     sortedId = id.sort((n1,n2) => n1 - n2);
     
     for(let i = 0; i < copy.length; i++){
-      console.log(copy[i].LogID + "i(outer)");
+      console.log(copy[i].logID + "i(outer)");
       console.log(sortedId[j] + "j(outer)");
-      if(copy[i].LogID == sortedId[j]){
-        console.log(copy[i].LogID + "i(inner)");
+      if(copy[i].logID == sortedId[j]){
+        console.log(copy[i].logID + "i(inner)");
         console.log(sortedId[j]+ "j(inner)");
         this.dataSource.data.splice(i , sortedId.length);
         console.log(copy[i]);

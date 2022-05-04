@@ -54,37 +54,37 @@
   <!-- Other Data Columns -->
   <ng-container matColumnDef="LogID">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Log ID</th>
-    <td mat-cell *matCellDef="let element">{{ element.LogID }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.logID }}</td>
   </ng-container>
 
   <ng-container matColumnDef="Application">
     <th mat-header-cell *matHeaderCellDef>Application</th>
-    <td mat-cell *matCellDef="let element">{{ element.Application }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.application }}</td>
   </ng-container>
 
   <ng-container matColumnDef="ApplicationVersion">
     <th mat-header-cell *matHeaderCellDef>App Version</th>
-    <td mat-cell *matCellDef="let element">{{ element.ApplicationVersion }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.applicationVersion }}</td>
   </ng-container>
 
   <ng-container matColumnDef="UserID">
     <th mat-header-cell *matHeaderCellDef>User ID</th>
-    <td mat-cell *matCellDef="let element">{{ element.UserID }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.userID }}</td>
   </ng-container>
 
   <ng-container matColumnDef="CompanyID">
     <th mat-header-cell *matHeaderCellDef>Company ID</th>
-    <td mat-cell *matCellDef="let element">{{ element.CompanyID }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.companyID }}</td>
   </ng-container>
 
   <ng-container matColumnDef="LogDateTime">
     <th mat-header-cell *matHeaderCellDef>Date/Time</th>
-    <td mat-cell *matCellDef="let element">{{ element.LogDateTime }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.logDateTime }}</td>
   </ng-container>
 
   <ng-container matColumnDef="LogContent">
     <th mat-header-cell *matHeaderCellDef>Content</th>
-    <td mat-cell *matCellDef="let element">{{ element.LogContent }}</td>
+    <td mat-cell *matCellDef="let element">{{ element.logContent }}</td>
   </ng-container>
 
   <ng-container matColumnDef="Actions">
@@ -122,7 +122,7 @@
 <div *ngIf="!clickedRows.size">Clicked rows will be logged here</div>
 
 <ul>
-  <li *ngFor="let x of clickedRows">Clicked on {{ x.LogID }}</li>
+  <li *ngFor="let x of clickedRows">Clicked on {{ x.logID }}</li>
 </ul>
 
 <!-- STICKY FOOTER -->

@@ -24,6 +24,7 @@ export class PostLogsService {
   getLogs(){
     //returns observable
     const headers = { 'content-type': 'application/json'}  
+    console.log("get");
     return this.http.get("https://localhost:5001/api/DatabaseLogs/GetAllDatabaseLogs", {'headers': headers});
 
   }
